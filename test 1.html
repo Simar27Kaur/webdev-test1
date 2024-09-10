@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <style>
+
+        table {
+            tr:nth-child(even){
+        background-color:  #D6EEEE;}
+          text-align:center;
+          margin-left: auto;
+          margin-right: auto;
+          font-family:Arial, Helvetica, sans-serif;
+        }
+
+        input, button {
+          padding: 16px 22px;           margin: 8px 0;
+          display: inline-block;        border: 1px solid #d7d4d4fd;
+          border-radius: 8px;           box-sizing:unset;
+          font-family:Georgia, 'Times New Roman', Times, serif;
+          align: center;
+         }
+
+      </style>
+   </head>
+   <body>
+      <div align="center">
+      <h1><u>SimarCalculator</u></h1> 
+    
+       
+      <button onclick="addActivity()" id="addActivity">
+        Add Activity</button>
+      <label for="activity">Activity</label>
+      <input type="text" id="activity" size="3">
+       
+      <label for="Weight">Weight</label>
+      <input type="text" id="Weight" size="3"><br>    
+
+      <button onclick="addGrade()" id="addGrade">
+        Add Grade</button>
+        <label for="grade">Grade</label>
+      <input type="text" id="grade" size="3" min="0" max="100">
+
+      <label for="activityNo">Activity no</label>
+      <input type="text" id="activityNo" size="3"><br>        
+   
+      <button onclick="deleteActivity()" id="deleteActivity">
+      Delete Activity </button>    
+
+      <table border="3" id="theTable" style="width:60%">
+        <thead>
+          <tr>
+              <th>No</th>
+              <th>Activity</th> <th>Weight</th>
+              <th>Grade</th> </tr></thead>  
+          <tbody>
+              <tr>
+              <td>1</td> <td>Lab1</td>
+              <td>10</td> <td></td>
+          </tr>
+          <tr>
+              <td>2</td> <td>Lab2</td>
+              <td>20</td> <td></td>
+          </tr>
+          <tr>
+              <td>3</td> <td>Test1</td>
+              <td>30</td> <td></td>
+          </tr>
+          <tr>
+              <td>4</td> <td>Test2</td>
+              <td>40</td> <td></td>
+          </tr>
+        </tbody>
+      </table>
+     <p id="ERR" style="color:red;" >Error Message: </p>
+      
+     <script>
+      let noActivity = 4;
+      const ERR = document.getElementById("ERR");
+  
+      function showError(message) {
+          ERR.className = "error";
+          ERR.innerHTML = `Error Message: ${message}`;
+      }
+  
+      function showSuccess(message) {
+          ERR.className = "success";
+          ERR.innerHTML = message;
+      }
+  
+      function addActivity() {
+          const activity = document.getElementById("activity").value;
+          const weight = parseFloat(document.getElementById("weight").value);
+  
+          if (!activity) return showError("Activity name is rejected.");
+          if (isNaN(weight) || weight < 1 || weight > 100) return showError("Weight is rejected.");
+  
+          const table = document.getElementById("theTable").getElementsByTagName('tbody')[0];
+          table.innerHTML += `<tr><td>${++noActivity}</td><td>${activity}</td><td>${weight}</td><td></td></tr>`;
+  
+          document.getElementById("activity").value = "";
+          document.getElementById("weight").value = "";
+  
+          showSuccess("Activity added successfully!");
+      }
+  
+      function addGrade() {
+          const activityNo = parseInt(document.getElementById("activityNo").value);
+          const grade = parseFloat(document.getElementById("grade").value);
+  
+          if (isNaN(activityNo) || activityNo < 1 || activityNo > noActivity) return showError("Activity No is rejected.");
+          if (isNaN(grade) || grade < 0 || grade > 100) return showError("Grade is rejected.");
+  
+          const row = document.getElementById("theTable").rows[activityNo];
+          if (row) {
+              row.cells[3].innerHTML = grade;
+              document.getElementById("activityNo").value = "";
+              document.getElementById("grade").value = "";
+              showSuccess("Grade added successfully!");
+          } else {
+              showError("Activity No is rejected.");
+          }
+      }
+  
+      function deleteActivity() {
+          const table = document.getElementById("theTable");
+          if (table.rows.length > 1) {
+              table.deleteRow(-1);
+              noActivity--;
+              showSuccess("Activity deleted successfully!");
+          } else {
+              showError("No more activities to remove.");
+          }
+      }
+  </script>
+  
+  </body> 
+  </html>
+
+
+  
